@@ -1,0 +1,4 @@
+* text
+*.csproj eol=crlf
+*.ico binary
+*.sln eol=crlf
