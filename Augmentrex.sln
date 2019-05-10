@@ -17,7 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{047B8436-9292-466C-B8C3-A5B133A58A51}"
 	ProjectSection(SolutionItems) = preProject
-		.github\CODEOWNERS.txt = .github\CODEOWNERS.txt
+		.github\CODEOWNERS = .github\CODEOWNERS
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Augmentrex.Commands.PatchLongRayVM", "Augmentrex.Commands.PatchLongRayVM\Augmentrex.Commands.PatchLongRayVM.csproj", "{3649819A-6DB2-4D13-92D1-9AF8DCF1F6E6}"
