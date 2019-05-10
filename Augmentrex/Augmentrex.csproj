@@ -13,6 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <LangVersion>preview</LangVersion>
     <OutputType>Exe</OutputType>
+    <PlatformTarget>x86</PlatformTarget>
     <Prefer32Bit>true</Prefer32Bit>
     <ProjectGuid>{6E5B1E1C-5C31-444F-906D-C1C04DB0CB5F}</ProjectGuid>
     <RootNamespace>Augmentrex</RootNamespace>
@@ -24,14 +25,12 @@
     <DebugType>embedded</DebugType>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <OutputPath>..\bin\Debug\</OutputPath>
-    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <DebugType>portable</DebugType>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <OutputPath>..\bin\Release\</OutputPath>
-    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CommandInterpreter.cs" />
