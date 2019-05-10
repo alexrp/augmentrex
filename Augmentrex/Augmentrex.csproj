@@ -88,15 +88,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="$(NuGetPackageRoot)\easyhook\2.7.6789\content\net40\EasyHook32.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Visible>false</Visible>
-    </None>
-    <None Include="$(NuGetPackageRoot)\easyhook\2.7.6789\content\net40\EasyHook32Svc.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Visible>false</Visible>
-    </None>
-    <None Include="$(NuGetPackageRoot)\easyhook\2.7.6789\content\net40\EasyLoad32.dll">
+    <None Include="$(NuGetPackageRoot)\easyhook\2.7.6789\content\net40\*32*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Visible>false</Visible>
     </None>
