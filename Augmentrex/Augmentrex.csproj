@@ -7,10 +7,8 @@
     <ApplicationIcon>Properties\Hellgate.ico</ApplicationIcon>
     <ApplicationManifest>Properties\App.manifest</ApplicationManifest>
     <AssemblyName>Augmentrex</AssemblyName>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <DebugSymbols>true</DebugSymbols>
     <Deterministic>true</Deterministic>
-    <FileAlignment>512</FileAlignment>
     <LangVersion>preview</LangVersion>
     <OutputType>Exe</OutputType>
     <PlatformTarget>x86</PlatformTarget>
