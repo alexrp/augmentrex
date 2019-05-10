@@ -2,6 +2,7 @@
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <ApplicationIcon>Properties\Hellgate.ico</ApplicationIcon>
@@ -12,7 +13,6 @@
     <LangVersion>preview</LangVersion>
     <OutputPath>..\bin\Debug\</OutputPath>
     <OutputType>Exe</OutputType>
-    <PlatformTarget>x86</PlatformTarget>
     <Prefer32Bit>true</Prefer32Bit>
     <ProjectGuid>{6E5B1E1C-5C31-444F-906D-C1C04DB0CB5F}</ProjectGuid>
     <RootNamespace>Augmentrex</RootNamespace>
@@ -23,11 +23,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugType>embedded</DebugType>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <DebugType>portable</DebugType>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CommandInterpreter.cs" />

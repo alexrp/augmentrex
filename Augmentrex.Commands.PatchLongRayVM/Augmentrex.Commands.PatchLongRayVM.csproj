@@ -2,6 +2,7 @@
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AssemblyName>augmentrex-patch-long-ray-vm</AssemblyName>
@@ -10,7 +11,6 @@
     <LangVersion>preview</LangVersion>
     <OutputPath>..\bin\Debug\</OutputPath>
     <OutputType>Library</OutputType>
-    <PlatformTarget>x86</PlatformTarget>
     <ProjectGuid>{3649819A-6DB2-4D13-92D1-9AF8DCF1F6E6}</ProjectGuid>
     <RootNamespace>Augmentrex.Commands.PatchLongRayVM</RootNamespace>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
@@ -19,11 +19,13 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugType>embedded</DebugType>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>portable</DebugType>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="PatchLongRayVMCommand.cs" />
