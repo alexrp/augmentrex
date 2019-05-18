@@ -29,22 +29,31 @@ namespace Augmentrex
                 return null;
 
             var steamApps = Path.Combine(steam, "steamapps");
-            var libraryDirs = new List<string>()
+            var libraryFolders = Path.Combine(steamApps, "libraryfolders.vdf");
+            var libraryDirs = new List<string>
             {
                 steamApps,
             };
 
-            foreach (var line in File.ReadAllLines(Path.Combine(steamApps, "libraryfolders.vdf")))
+            if (File.Exists(libraryFolders))
             {
-                var match = Regex.Match(line, "^\\s*\"\\d*\"\\s*\"(?<path>\\S*)\"");
+                foreach (var line in File.ReadAllLines(libraryFolders))
+                {
+                    var match = Regex.Match(line, "^\\s*\"\\d*\"\\s*\"(?<path>\\S*)\"");
 
-                if (match.Success)
-                    libraryDirs.Add(match.Groups["path"].Value);
+                    if (match.Success)
+                        libraryDirs.Add(match.Groups["path"].Value);
+                }
             }
 
             foreach (var library in libraryDirs)
             {
-                foreach (var line in File.ReadAllLines(Path.Combine(library, "appmanifest_939520.acf")))
+                var manifest = Path.Combine(library, "appmanifest_939520.acf");
+
+                if (!File.Exists(manifest))
+                    continue;
+
+                foreach (var line in File.ReadAllLines(manifest))
                 {
                     var match = Regex.Match(line, "^\\s*\"installdir\"\\s*\"(?<path>\\S*)\"");
 
