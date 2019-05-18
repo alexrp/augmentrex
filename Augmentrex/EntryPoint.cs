@@ -2,7 +2,9 @@ using Augmentrex.Memory;
 using EasyHook;
 using System;
 using System.Diagnostics;
+using System.Reflection;
 using System.Threading.Tasks;
+using Vanara.PInvoke;
 
 namespace Augmentrex
 {
@@ -18,13 +20,14 @@ namespace Augmentrex
 
             var channel = IpcChannel.Connect(channelName);
 
+            channel.Ping();
+
             AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
             {
                 channel.Line();
                 channel.Error("Injected assembly crashed: {0}", e.ExceptionObject);
             };
 
-            channel.Ping();
             channel.KeepAlive();
 
             Task.Factory.StartNew(async () =>
@@ -37,15 +40,26 @@ namespace Augmentrex
                 }
             }, TaskCreationOptions.LongRunning);
 
-            var process = Process.GetCurrentProcess();
+            channel.Info("Creating console window for injected assembly...");
+
+            if (Kernel32.AllocConsole())
+            {
+                var asmName = Assembly.GetExecutingAssembly().GetName();
+
+                Console.Title = $"{asmName.Name} {asmName.Version} - Game Process";
+            }
+            else
+                channel.Warning("Could not allocate console window: {0}", Win32.GetLastError());
+
+            using var process = Process.GetCurrentProcess();
             var mod = process.MainModule;
             var addr = (MemoryAddress)mod.BaseAddress;
             var size = mod.ModuleMemorySize;
 
             channel.Info("Making main module ({0}..{1}) writable...", addr, addr + (MemoryOffset)size);
 
-            if (!MemoryWin32.VirtualProtectEx(process.Handle, addr, (UIntPtr)size, 0x04, out var _))
-                channel.Error("Could not make main module writable. Code modification will not be possible.");
+            if (!Kernel32.VirtualProtectEx(process.Handle, addr, size, Kernel32.MEM_PROTECTION.PAGE_EXECUTE_READWRITE, out var _))
+                channel.Warning("Could not make main module writable: {0}", Win32.GetLastError());
 
             CommandInterpreter.LoadCommands();
 
@@ -64,6 +78,8 @@ namespace Augmentrex
             channel.Line();
 
             interp.RunLoop();
+
+            Kernel32.FreeConsole();
         }
     }
 }

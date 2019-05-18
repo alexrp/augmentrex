@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Vanara.PInvoke;
 
 namespace Augmentrex
 {
@@ -22,8 +23,11 @@ namespace Augmentrex
 
             var asm = Assembly.GetExecutingAssembly();
             var asmName = asm.GetName();
+            var name = $"{asmName.Name} {asmName.Version}";
 
-            Log.Info("{0} {1} initializing...", asmName.Name, asmName.Version);
+            Console.Title = $"{name} - Host Process";
+
+            Log.Info("{0} initializing...", name);
 
             var path = GetExecutablePath();
 
@@ -45,7 +49,7 @@ namespace Augmentrex
 
             var location = asm.Location;
 
-            RemoteHooking.CreateAndInject(path, Configuration.Instance.GameArguments, 0x10, location, location, out var pid, chanName);
+            RemoteHooking.CreateAndInject(path, Configuration.Instance.GameArguments, 0, location, location, out var pid, chanName);
 
             using var proc = Process.GetProcessById(pid);
 
