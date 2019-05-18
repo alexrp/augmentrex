@@ -14,6 +14,8 @@ namespace Augmentrex
 
         public void Run(RemoteHooking.IContext context, string channelName)
         {
+            RemoteHooking.WakeUpProcess();
+
             var channel = IpcChannel.Connect(channelName);
 
             AppDomain.CurrentDomain.UnhandledException += (sender, e) =>

@@ -47,7 +47,6 @@
     <Compile Include="Commands\HelpCommand.cs" />
     <Compile Include="Commands\WriteCommand.cs" />
     <Compile Include="EntryPoint.cs" />
-    <Compile Include="Launcher.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Memory\MemoryWin32.cs" />
     <Compile Include="Memory\MemoryAddress.cs" />

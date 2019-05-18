@@ -1,6 +1,11 @@
 using EasyHook;
+using Microsoft.Win32;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace Augmentrex
 {
@@ -20,55 +25,113 @@ namespace Augmentrex
 
             Log.Info("{0} {1} initializing...", asmName.Name, asmName.Version);
 
-            var process = Launcher.AttachOrLaunch();
+            var path = GetExecutablePath();
 
-            if (process == null)
+            if (path == null)
             {
-                Log.Error("Could not attach to or launch Hellgate: London.");
+                Log.Error("Could not find Hellgate: London executable.");
                 return 1;
             }
 
-            try
+            var chanName = IpcChannel.Create();
+
+            Log.Info("Setting up IPC channel '{0}'...", chanName);
+
+            var chan = IpcChannel.Connect(chanName);
+
+            chan.Ping();
+
+            Log.Info("Launching '{0}'...", path);
+
+            var location = asm.Location;
+
+            RemoteHooking.CreateAndInject(path, Configuration.Instance.GameArguments, 0x10, location, location, out var pid, chanName);
+
+            using var proc = Process.GetProcessById(pid);
+
+            if (proc == null)
             {
-                var chanName = IpcChannel.Create();
+                Log.Error("Could not locate Hellgate: London process ({0}).", pid);
+                return 1;
+            }
 
-                Log.Info("Connecting to IPC channel '{0}'...", chanName);
-
-                var chan = IpcChannel.Connect(chanName);
-
-                chan.Ping();
-
-                Log.Info("Injecting process '{0}' ({1})...", process.ProcessName, process.Id);
-
-                var location = asm.Location;
-
-                RemoteHooking.Inject(process.Id, InjectionOptions.DoNotRequireStrongName, location, location, chanName);
-
-                while (chan.Wait(Configuration.Instance.IpcTimeout))
+            while (chan.Wait(Configuration.Instance.IpcTimeout))
+            {
+                if (chan.ExitCode is int c)
                 {
-                    if (chan.ExitCode is int c)
-                    {
-                        Log.Important("Exiting...");
+                    Log.Important("Exiting...");
 
-                        if (chan.KillRequested)
-                            process.Kill();
+                    if (chan.KillRequested)
+                        proc.Kill();
 
-                        return c;
-                    }
-
-                    chan.Reset();
+                    return c;
                 }
 
-                Log.Line();
-                Log.Error("Lost connection to the game. Exiting...");
-                Console.ReadLine();
+                chan.Reset();
+            }
 
-                return 1;
-            }
-            finally
+            Log.Line();
+            Log.Error("Lost connection to the game. Exiting...");
+            Console.ReadLine();
+
+            return 1;
+        }
+
+        static string GetExecutablePath()
+        {
+            var cfg = Configuration.Instance.GamePath;
+
+            if (!string.IsNullOrWhiteSpace(cfg))
+                return cfg;
+
+            string steam = null;
+
+            using (var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Valve\Steam"))
+                steam = (string)key?.GetValue("InstallPath");
+
+            if (steam == null)
+                return null;
+
+            var steamApps = Path.Combine(steam, "steamapps");
+            var libraryFolders = Path.Combine(steamApps, "libraryfolders.vdf");
+            var libraryDirs = new List<string>
             {
-                Launcher.Dispose();
+                steamApps,
+            };
+
+            if (File.Exists(libraryFolders))
+            {
+                foreach (var line in File.ReadAllLines(libraryFolders))
+                {
+                    var match = Regex.Match(line, "^\\s*\"\\d*\"\\s*\"(?<path>\\S*)\"");
+
+                    if (match.Success)
+                        libraryDirs.Add(match.Groups["path"].Value);
+                }
             }
+
+            foreach (var library in libraryDirs)
+            {
+                var manifest = Path.Combine(library, "appmanifest_939520.acf");
+
+                if (!File.Exists(manifest))
+                    continue;
+
+                foreach (var line in File.ReadAllLines(manifest))
+                {
+                    var match = Regex.Match(line, "^\\s*\"installdir\"\\s*\"(?<path>\\S*)\"");
+
+                    if (match.Success)
+                    {
+                        var path = Path.Combine(library, "common", match.Groups["path"].Value, "bin", "Hellgate_sp_x86.exe");
+
+                        if (File.Exists(path))
+                            return path;
+                    }
+                }
+            }
+
+            return null;
         }
     }
 }
