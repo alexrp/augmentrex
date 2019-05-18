@@ -1,4 +1,5 @@
 using EasyHook;
+using System;
 using System.Reflection;
 
 namespace Augmentrex
@@ -7,6 +8,13 @@ namespace Augmentrex
     {
         static int Main()
         {
+            AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
+            {
+                Log.Line();
+                Log.Error("Host assembly crashed: {0}", e.ExceptionObject);
+                Console.ReadLine();
+            };
+
             var asm = Assembly.GetExecutingAssembly();
             var asmName = asm.GetName();
 
@@ -53,6 +61,7 @@ namespace Augmentrex
 
                 Log.Line();
                 Log.Error("Lost connection to the game. Exiting...");
+                Console.ReadLine();
 
                 return 1;
             }

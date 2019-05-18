@@ -18,6 +18,7 @@ namespace Augmentrex
 
             AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
             {
+                channel.Line();
                 channel.Error("Injected assembly crashed: {0}", e.ExceptionObject);
             };
 
