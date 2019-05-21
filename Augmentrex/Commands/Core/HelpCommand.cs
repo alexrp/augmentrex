@@ -2,9 +2,9 @@ using CommandLine;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Augmentrex.Commands
+namespace Augmentrex.Commands.Core
 {
-    public sealed class HelpCommand : Command
+    sealed class HelpCommand : Command
     {
         sealed class HelpOptions
         {
@@ -21,7 +21,7 @@ namespace Augmentrex.Commands
         public override string Syntax =>
             "[command ...]";
 
-        public override int? Run(CommandContext context, string[] args)
+        public override int? Run(AugmentrexContext context, string[] args)
         {
             var opts = Parse<HelpOptions>(context, args);
 
@@ -38,7 +38,7 @@ namespace Augmentrex.Commands
                     if (cmd == null)
                     {
                         unknown = true;
-                        context.Error("Unknown command '{0}'.", name);
+                        context.ErrorLine("Unknown command '{0}'.", name);
                     }
                 }
 
@@ -56,7 +56,7 @@ namespace Augmentrex.Commands
             else
             {
                 context.Line();
-                context.Info("Available commands:");
+                context.InfoLine("Available commands:");
                 context.Line();
 
                 foreach (var cmd in CommandInterpreter.Commands)

@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace Augmentrex
+namespace Augmentrex.Commands
 {
     sealed class CommandInterpreter
     {
@@ -15,7 +14,7 @@ namespace Augmentrex
 
             public string[] GetSuggestions(string text, int index)
             {
-                return Commands.SelectMany(x => x.Names).Where(x => x.StartsWith(text, StringComparison.CurrentCultureIgnoreCase)).ToArray();
+                return Commands.SelectMany(x => x.Names).Where(y => MatchCommand(y, text)).ToArray();
             }
         }
 
@@ -23,41 +22,41 @@ namespace Augmentrex
 
         public static IReadOnlyCollection<Command> Commands => _commands;
 
-        public CommandContext Context { get; }
+        public AugmentrexContext Context { get; }
 
-        public CommandInterpreter(Process process, IpcChannel channel)
+        public CommandInterpreter(AugmentrexContext context)
         {
-            Context = new CommandContext(process, channel);
+            Context = context;
         }
 
-        public static void LoadCommands()
+        public static void LoadCommands(bool informational)
         {
             var exe = Assembly.GetExecutingAssembly();
-            var asms = Directory.EnumerateFiles(Path.GetDirectoryName(exe.Location), "augmentrex-*.dll", SearchOption.AllDirectories)
-                .Select(x => Assembly.LoadFile(x))
+            var asms = Directory.EnumerateFiles(Path.GetDirectoryName(exe.Location), "augmentrex-command-*.dll")
+                .Select(x => Assembly.UnsafeLoadFrom(x))
                 .Concat(new[] { exe });
 
+            static Command InstantiateCommand(Type type, bool informational)
+            {
+                var ctor = type.GetConstructor(new[] { typeof(bool) });
+
+                return ctor != null ? (Command)ctor.Invoke(new object[] { informational }) : (Command)Activator.CreateInstance(type);
+            }
+
             foreach (var asm in asms)
-                LoadCommandsIn(asm);
+                foreach (var type in asm.DefinedTypes.Where(x => x.BaseType == typeof(Command)))
+                    _commands.Add(InstantiateCommand(type, informational));
 
-            _commands.Sort((a, b) => a.GetType().Name.CompareTo(b.GetType().Name));
-        }
-
-        static void LoadCommandsIn(Assembly assembly)
-        {
-            foreach (var type in assembly.ExportedTypes.Where(x => x.BaseType == typeof(Command)))
-                _commands.Add((Command)Activator.CreateInstance(type));
+            _commands.Sort((a, b) => string.Compare(a.GetType().Name, b.GetType().Name, StringComparison.InvariantCulture));
         }
 
         public static Command GetCommand(string name)
         {
-            return Commands.Where(x => x.Names.Any(x => x.StartsWith(name, StringComparison.CurrentCultureIgnoreCase))).FirstOrDefault();
+            return Commands.Where(x => x.Names.Any(y => MatchCommand(y, name))).FirstOrDefault();
         }
 
         public bool RunCommand(string command)
         {
-            var chan = Context.Channel;
-
             if (string.IsNullOrWhiteSpace(command))
                 return true;
 
@@ -67,7 +66,7 @@ namespace Augmentrex
 
             if (cmd == null)
             {
-                chan.Error("Unknown command '{0}'.", name);
+                Context.ErrorLine("Unknown command '{0}'.", name);
 
                 return true;
             }
@@ -80,11 +79,13 @@ namespace Augmentrex
             }
             catch (Exception ex)
             {
-                chan.Error("Command '{0}' failed: {1}", name, ex.ToString());
+                Context.ErrorLine("Command '{0}' failed: {1}", name, ex.ToString());
             }
 
             if (code is int c)
             {
+                var chan = Context.Ipc.Channel;
+
                 chan.ExitCode = c;
                 chan.KeepAlive();
 
@@ -98,12 +99,16 @@ namespace Augmentrex
         {
             while (true)
             {
-                var chan = Context.Channel;
-                var str = chan.ReadPrompt();
+                var str = Context.Ipc.Channel.ReadPrompt();
 
                 if (!RunCommand(str))
                     break;
             }
+        }
+
+        static bool MatchCommand(string command, string prefix)
+        {
+            return command.StartsWith(prefix, StringComparison.CurrentCultureIgnoreCase);
         }
     }
 }

@@ -1,12 +1,13 @@
+using Augmentrex.Ipc;
 using EasyHook;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using Vanara.PInvoke;
 
 namespace Augmentrex
 {
@@ -17,7 +18,7 @@ namespace Augmentrex
             AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
             {
                 Log.Line();
-                Log.Error("Host assembly crashed: {0}", e.ExceptionObject);
+                Log.ErrorLine("Host assembly crashed: {0}", e.ExceptionObject);
                 Console.ReadLine();
             };
 
@@ -27,35 +28,35 @@ namespace Augmentrex
 
             Console.Title = $"{name} - Host Process";
 
-            Log.Info("{0} initializing...", name);
+            Log.InfoLine("{0} initializing...", name);
 
             var path = GetExecutablePath();
 
             if (path == null)
             {
-                Log.Error("Could not find Hellgate: London executable.");
+                Log.ErrorLine("Could not find Hellgate: London executable.");
                 return 1;
             }
 
             var chanName = IpcChannel.Create();
 
-            Log.Info("Setting up IPC channel '{0}'...", chanName);
+            Log.InfoLine("Setting up IPC channel '{0}'...", chanName);
 
             var chan = IpcChannel.Connect(chanName);
 
             chan.Ping();
 
-            Log.Info("Launching '{0}'...", path);
+            Log.InfoLine("Launching '{0}'...", path);
 
             var location = asm.Location;
 
             RemoteHooking.CreateAndInject(path, Configuration.Instance.GameArguments, 0, location, location, out var pid, chanName);
 
-            using var proc = Process.GetProcessById(pid);
+            using var proc = Process.GetProcesses().FirstOrDefault(x => x.Id == pid);
 
             if (proc == null)
             {
-                Log.Error("Could not locate Hellgate: London process ({0}).", pid);
+                Log.ErrorLine("Could not locate Hellgate: London process ({0}).", pid);
                 return 1;
             }
 
@@ -63,7 +64,7 @@ namespace Augmentrex
             {
                 if (chan.ExitCode is int c)
                 {
-                    Log.Important("Exiting...");
+                    Log.SuccessLine("Exiting...");
 
                     if (chan.KillRequested)
                         proc.Kill();
@@ -75,7 +76,7 @@ namespace Augmentrex
             }
 
             Log.Line();
-            Log.Error("Lost connection to the game. Exiting...");
+            Log.ErrorLine("Lost connection to the game. Exiting...");
             Console.ReadLine();
 
             return 1;

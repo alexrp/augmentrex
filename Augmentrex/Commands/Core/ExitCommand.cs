@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 
-namespace Augmentrex.Commands
+namespace Augmentrex.Commands.Core
 {
-    public sealed class ExitCommand : Command
+    sealed class ExitCommand : Command
     {
         public override IReadOnlyList<string> Names { get; } =
             new[] { "exit", "quit" };
@@ -10,7 +10,7 @@ namespace Augmentrex.Commands
         public override string Description =>
             "Detaches Augmentrex from the game and exits, leaving the game open.";
 
-        public override int? Run(CommandContext context, string[] args)
+        public override int? Run(AugmentrexContext context, string[] args)
         {
             return 0;
         }

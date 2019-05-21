@@ -1,8 +1,9 @@
+using System;
 using System.Collections.Generic;
 
-namespace Augmentrex.Commands
+namespace Augmentrex.Commands.Core
 {
-    public sealed class ClearCommand : Command
+    sealed class ClearCommand : Command
     {
         public override IReadOnlyList<string> Names { get; } =
             new[] { "clear" };
@@ -10,9 +11,10 @@ namespace Augmentrex.Commands
         public override string Description =>
             "Clears the console buffer, including the scrollback buffer.";
 
-        public override int? Run(CommandContext context, string[] args)
+        public override int? Run(AugmentrexContext context, string[] args)
         {
-            context.Channel.Clear();
+            context.Ipc.Channel.Clear();
+            Console.Clear();
 
             return null;
         }

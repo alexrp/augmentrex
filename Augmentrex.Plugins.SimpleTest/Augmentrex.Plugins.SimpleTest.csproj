@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <AssemblyName>augmentrex-command-patch-long-ray-vm</AssemblyName>
+    <AssemblyName>augmentrex-plugin-simple-test</AssemblyName>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>embedded</DebugType>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
@@ -13,8 +13,8 @@
     <LangVersion>8.0</LangVersion>
     <OutputPath>..\bin\</OutputPath>
     <OutputType>Library</OutputType>
-    <ProjectGuid>{3649819A-6DB2-4D13-92D1-9AF8DCF1F6E6}</ProjectGuid>
-    <RootNamespace>Augmentrex.Commands.PatchLongRayVM</RootNamespace>
+    <ProjectGuid>{394AFD4F-3461-4C52-AECC-01BFFAB961EF}</ProjectGuid>
+    <RootNamespace>Augmentrex.Plugins.SimpleTest</RootNamespace>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
@@ -22,7 +22,7 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="PatchLongRayVMCommand.cs" />
+    <Compile Include="SimpleTestPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

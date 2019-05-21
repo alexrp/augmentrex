@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
-namespace Augmentrex.Commands
+namespace Augmentrex.Commands.Core
 {
-    public sealed class WriteCommand : Command
+    sealed class WriteCommand : Command
     {
         enum WriteType : byte
         {
@@ -56,7 +56,7 @@ namespace Augmentrex.Commands
                 " (defaults to 'i32').",
             };
 
-        public override int? Run(CommandContext context, string[] args)
+        public override int? Run(AugmentrexContext context, string[] args)
         {
             var opts = Parse<WriteOptions>(context, args);
 

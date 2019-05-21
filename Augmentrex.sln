@@ -20,22 +20,25 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{047B
 		.github\CODEOWNERS = .github\CODEOWNERS
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Augmentrex.Commands.PatchCCAgent", "Augmentrex.Commands.PatchCCAgent\Augmentrex.Commands.PatchCCAgent.csproj", "{0AC3B157-4389-4FDB-8778-F87E48C1C663}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Augmentrex.Commands.PatchLongRayVM", "Augmentrex.Commands.PatchLongRayVM\Augmentrex.Commands.PatchLongRayVM.csproj", "{3649819A-6DB2-4D13-92D1-9AF8DCF1F6E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Augmentrex.Plugins.SimpleTest", "Augmentrex.Plugins.SimpleTest\Augmentrex.Plugins.SimpleTest.csproj", "{394AFD4F-3461-4C52-AECC-01BFFAB961EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
-		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{6E5B1E1C-5C31-444F-906D-C1C04DB0CB5F}.Debug|x86.ActiveCfg = Debug|x86
 		{6E5B1E1C-5C31-444F-906D-C1C04DB0CB5F}.Debug|x86.Build.0 = Debug|x86
-		{6E5B1E1C-5C31-444F-906D-C1C04DB0CB5F}.Release|x86.ActiveCfg = Release|x86
-		{6E5B1E1C-5C31-444F-906D-C1C04DB0CB5F}.Release|x86.Build.0 = Release|x86
+		{0AC3B157-4389-4FDB-8778-F87E48C1C663}.Debug|x86.ActiveCfg = Debug|x86
+		{0AC3B157-4389-4FDB-8778-F87E48C1C663}.Debug|x86.Build.0 = Debug|x86
 		{3649819A-6DB2-4D13-92D1-9AF8DCF1F6E6}.Debug|x86.ActiveCfg = Debug|x86
 		{3649819A-6DB2-4D13-92D1-9AF8DCF1F6E6}.Debug|x86.Build.0 = Debug|x86
-		{3649819A-6DB2-4D13-92D1-9AF8DCF1F6E6}.Release|x86.ActiveCfg = Release|x86
-		{3649819A-6DB2-4D13-92D1-9AF8DCF1F6E6}.Release|x86.Build.0 = Release|x86
+		{394AFD4F-3461-4C52-AECC-01BFFAB961EF}.Debug|x86.ActiveCfg = Debug|x86
+		{394AFD4F-3461-4C52-AECC-01BFFAB961EF}.Debug|x86.Build.0 = Debug|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

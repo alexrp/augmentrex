@@ -1,9 +1,10 @@
+using Augmentrex.Commands;
 using EasyHook;
 using System;
 using System.Runtime.Remoting;
 using System.Threading;
 
-namespace Augmentrex
+namespace Augmentrex.Ipc
 {
     sealed class IpcChannel : MarshalByRefObject
     {
@@ -21,7 +22,7 @@ namespace Augmentrex
         {
             Configuration = Configuration.Instance;
 
-            CommandInterpreter.LoadCommands();
+            CommandInterpreter.LoadCommands(true);
             ReadLine.AutoCompletionHandler = new CommandInterpreter.CommandAutoCompletionHandler();
         }
 
@@ -63,14 +64,14 @@ namespace Augmentrex
             _keepAlive.Reset();
         }
 
-        public void Important(string format, params object[] args)
-        {
-            Log.Important(format, args);
-        }
-
         public void Info(string format, params object[] args)
         {
             Log.Info(format, args);
+        }
+
+        public void InfoLine(string format, params object[] args)
+        {
+            Log.InfoLine(format, args);
         }
 
         public void Warning(string format, params object[] args)
@@ -78,9 +79,49 @@ namespace Augmentrex
             Log.Warning(format, args);
         }
 
+        public void WarningLine(string format, params object[] args)
+        {
+            Log.WarningLine(format, args);
+        }
+
         public void Error(string format, params object[] args)
         {
             Log.Error(format, args);
+        }
+
+        public void ErrorLine(string format, params object[] args)
+        {
+            Log.ErrorLine(format, args);
+        }
+
+        public void Success(string format, params object[] args)
+        {
+            Log.Success(format, args);
+        }
+
+        public void SuccessLine(string format, params object[] args)
+        {
+            Log.SuccessLine(format, args);
+        }
+
+        public void Debug(string format, params object[] args)
+        {
+            Log.Debug(format, args);
+        }
+
+        public void DebugLine(string format, params object[] args)
+        {
+            Log.DebugLine(format, args);
+        }
+
+        public void Color(ConsoleColor color, string format, params object[] args)
+        {
+            Log.Color(color, format, args);
+        }
+
+        public void ColorLine(ConsoleColor color, string format, params object[] args)
+        {
+            Log.ColorLine(color, format, args);
         }
 
         public void Line()
@@ -90,9 +131,12 @@ namespace Augmentrex
 
         public string ReadPrompt()
         {
-            var str = ReadLine.Read($"hgl({++_counter})> ");
+            Log.Color(ConsoleColor.Cyan, "hgl({0})> ", ++_counter);
 
-            ReadLine.AddHistory(str);
+            var str = ReadLine.Read();
+
+            if (!string.IsNullOrWhiteSpace(str))
+                ReadLine.AddHistory(str);
 
             return str;
         }

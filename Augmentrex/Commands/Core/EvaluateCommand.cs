@@ -9,17 +9,19 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Augmentrex.Commands
+namespace Augmentrex.Commands.Core
 {
-    public sealed class EvaluateCommand : Command
+    sealed class EvaluateCommand : Command
     {
         public sealed class Globals
         {
 #pragma warning disable IDE1006 // Naming Styles
 
-            public CommandContext ctx { get; }
+            public AugmentrexContext ctx { get; }
 
-            public Process proc { get; }
+            public Process host { get; }
+
+            public Process game { get; }
 
             public MemoryWindow mem { get; }
 
@@ -27,10 +29,11 @@ namespace Augmentrex.Commands
 
 #pragma warning restore IDE1006 // Naming Styles
 
-            internal Globals(CommandContext context)
+            internal Globals(AugmentrexContext context)
             {
                 ctx = context;
-                proc = context.Process;
+                host = context.Host;
+                game = context.Game;
                 mem = context.Memory;
                 cfg = context.Configuration;
             }
@@ -65,7 +68,7 @@ namespace Augmentrex.Commands
 
         Script _script;
 
-        public override int? Run(CommandContext context, string[] args)
+        public override int? Run(AugmentrexContext context, string[] args)
         {
             var opts = Parse<EvaluateOptions>(context, args);
 
@@ -73,20 +76,16 @@ namespace Augmentrex.Commands
                 return null;
 
             if (_script == null || opts.Clear)
-            {
-                var imports = ScriptOptions.Default.Imports.AddRange(new[]
-                {
-                    nameof(Augmentrex),
-                    $"{nameof(Augmentrex)}.{nameof(Memory)}",
-                });
-                var options = ScriptOptions.Default
-                    .WithFilePath("<hgl>")
-                    .WithImports(imports)
-                    .WithLanguageVersion(LanguageVersion.Preview)
-                    .WithReferences(Assembly.GetExecutingAssembly());
-
-                _script = CSharpScript.Create(string.Empty, options, typeof(Globals));
-            }
+                _script = CSharpScript.Create(string.Empty,
+                    ScriptOptions.Default.WithFilePath("<hgl>")
+                        .WithImports(ScriptOptions.Default.Imports.AddRange(new[]
+                        {
+                            nameof(Augmentrex),
+                            $"{nameof(Augmentrex)}.{nameof(Memory)}",
+                        }))
+                        .WithLanguageVersion(LanguageVersion.Preview)
+                        .WithReferences(Assembly.GetExecutingAssembly()),
+                    typeof(Globals));
 
             Script script = _script.ContinueWith(string.Join(" ", opts.Fragments));
 
@@ -99,14 +98,14 @@ namespace Augmentrex.Commands
             catch (CompilationErrorException ex)
             {
                 foreach (var diag in ex.Diagnostics)
-                    context.Error("{0}", diag.ToString());
+                    context.ErrorLine("{0}", diag.ToString());
 
                 return null;
             }
 
             _script = script;
 
-            context.Info("{0}", task.Result.ReturnValue);
+            context.InfoLine("{0}", task.Result.ReturnValue);
 
             return null;
         }

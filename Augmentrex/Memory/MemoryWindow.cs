@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace Augmentrex.Memory
 {
+    [Serializable]
     public sealed class MemoryWindow
     {
         public MemoryAddress Address { get; }
@@ -17,7 +18,7 @@ namespace Augmentrex.Memory
             Length = length;
         }
 
-        public MemoryAddress ToAbsolute(MemoryOffset offset)
+        public MemoryAddress ToAddress(MemoryOffset offset)
         {
             return Address + offset;
         }
@@ -65,7 +66,7 @@ namespace Augmentrex.Memory
         public unsafe T Read<T>(MemoryOffset offset)
             where T : unmanaged
         {
-            return Unsafe.Read<T>(ToAbsolute(offset));
+            return Unsafe.Read<T>(ToAddress(offset));
         }
 
         public MemoryOffset ReadOffset(MemoryOffset offset)
@@ -77,7 +78,7 @@ namespace Augmentrex.Memory
         {
             var bytes = new byte[count];
 
-            Marshal.Copy(ToAbsolute(offset), bytes, 0, count);
+            Marshal.Copy(ToAddress(offset), bytes, 0, count);
 
             return bytes;
         }
@@ -85,47 +86,35 @@ namespace Augmentrex.Memory
         public T ReadStructure<T>(MemoryOffset offset)
             where T : struct
         {
-            return Marshal.PtrToStructure<T>(ToAbsolute(offset));
-        }
-
-        public T ReadDelegate<T>(MemoryOffset offset)
-            where T : Delegate
-        {
-            return Marshal.GetDelegateForFunctionPointer<T>(ToAbsolute(offset));
+            return Marshal.PtrToStructure<T>(ToAddress(offset));
         }
 
         public unsafe void Write<T>(MemoryOffset offset, T value)
             where T : unmanaged
         {
-            Unsafe.Write(ToAbsolute(offset), value);
+            Unsafe.Write(ToAddress(offset), value);
         }
 
         public void WriteOffset(MemoryOffset offset, MemoryOffset value)
         {
-            Write(offset, (uint)ToAbsolute(value));
+            Write(offset, (uint)ToAddress(value));
         }
 
         public void WriteBytes(MemoryOffset offset, byte[] values)
         {
-            Marshal.Copy(values, 0, ToAbsolute(offset), values.Length);
+            Marshal.Copy(values, 0, ToAddress(offset), values.Length);
         }
 
         public void WriteStructure<T>(MemoryOffset offset, T value)
             where T : struct
         {
-            Marshal.StructureToPtr(value, ToAbsolute(offset), false);
-        }
-
-        public void WriteDelegate<T>(MemoryOffset offset, T value)
-            where T : Delegate
-        {
-            Write(offset, Marshal.GetFunctionPointerForDelegate(value));
+            Marshal.StructureToPtr(value, ToAddress(offset), false);
         }
 
         public void DestroyStructure<T>(MemoryOffset offset)
             where T : struct
         {
-            Marshal.DestroyStructure<T>(ToAbsolute(offset));
+            Marshal.DestroyStructure<T>(ToAddress(offset));
         }
     }
 }

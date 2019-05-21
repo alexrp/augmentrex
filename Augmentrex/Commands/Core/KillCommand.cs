@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 
-namespace Augmentrex.Commands
+namespace Augmentrex.Commands.Core
 {
-    public sealed class KillCommand : Command
+    sealed class KillCommand : Command
     {
         public override IReadOnlyList<string> Names { get; } =
             new[] { "kill" };
@@ -10,9 +10,9 @@ namespace Augmentrex.Commands
         public override string Description =>
             "Detaches Augmentrex from the game, kills the game process, then exits.";
 
-        public override int? Run(CommandContext context, string[] args)
+        public override int? Run(AugmentrexContext context, string[] args)
         {
-            context.Channel.KillRequested = true;
+            context.Ipc.Channel.KillRequested = true;
 
             return 0;
         }

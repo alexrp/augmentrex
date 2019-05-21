@@ -3,7 +3,7 @@ using CommandLine.Text;
 using System;
 using System.Collections.Generic;
 
-namespace Augmentrex
+namespace Augmentrex.Commands
 {
     public abstract class Command
     {
@@ -15,24 +15,24 @@ namespace Augmentrex
 
         public virtual IReadOnlyList<string> Details => Array.Empty<string>();
 
-        protected static void PrintHelp(CommandContext context, Command command, bool details)
+        protected static void PrintHelp(AugmentrexContext context, Command command, bool details)
         {
-            context.Important("  {0} {1}", string.Join("|", command.Names), command.Syntax);
-            context.Info("    {0}", command.Description);
+            context.SuccessLine("  {0} {1}", string.Join("|", command.Names), command.Syntax);
+            context.InfoLine("    {0}", command.Description);
 
             if (details && command.Details.Count != 0)
             {
                 foreach (var detail in command.Details)
                 {
                     context.Line();
-                    context.Info("    {0}", detail);
+                    context.InfoLine("    {0}", detail);
                 }
             }
         }
 
-        public abstract int? Run(CommandContext context, string[] args);
+        public abstract int? Run(AugmentrexContext context, string[] args);
 
-        protected T Parse<T>(CommandContext context, string[] args)
+        protected T Parse<T>(AugmentrexContext context, string[] args)
             where T : class
         {
             return new Parser(opts =>
@@ -48,7 +48,7 @@ namespace Augmentrex
                     var builder = SentenceBuilder.Create();
 
                     foreach (var error in errors)
-                        context.Error("{0}", builder.FormatError(error));
+                        context.ErrorLine("{0}", builder.FormatError(error));
 
                     context.Line();
                     PrintHelp(context, this, true);

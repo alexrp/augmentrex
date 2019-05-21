@@ -21,7 +21,11 @@ namespace Augmentrex
 
         public TimeSpan IpcKeepAlive { get; set; }
 
+        public TimeSpan DebugListenerInterval { get; set; }
+
         public string[] RunCommands { get; set; }
+
+        public string[] DisabledPlugins { get; set; }
 
         Configuration(NameValueCollection cfg)
         {
@@ -29,7 +33,9 @@ namespace Augmentrex
             GameArguments = cfg["gameArguments"];
             IpcTimeout = TimeSpan.FromMilliseconds(int.Parse(cfg["ipcTimeout"]));
             IpcKeepAlive = TimeSpan.FromMilliseconds(int.Parse(cfg["ipcKeepAlive"]));
+            DebugListenerInterval = TimeSpan.FromMilliseconds(int.Parse(cfg["debugListenerInterval"]));
             RunCommands = Split(cfg["runCommands"], ';');
+            DisabledPlugins = Split(cfg["disabledPlugins"], ',');
         }
 
         static string[] Split(string value, params char[] separators)
