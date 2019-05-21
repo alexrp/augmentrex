@@ -82,7 +82,7 @@ way back when the game was online-only. The bug was almost certainly introduced
 by HanbitSoft when they took over the game from Flagship Studios. They have been
 aware of the bug for all this time. Even when they re-released the game as a
 single player title on Steam, they spent months pretending that people's PCs
-just didn't meet the game's minimum requirements.
+just did not meet the game's minimum requirements.
 
 To be perfectly clear: They are selling a broken product that is unplayable to
 the vast majority of people. They were fully aware of this, and proceeded with
