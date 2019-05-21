@@ -40,9 +40,12 @@ namespace Augmentrex.Commands
 
             static Command InstantiateCommand(Type type, bool informational)
             {
-                var ctor = type.GetConstructor(new[] { typeof(bool) });
+                const BindingFlags Flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
-                return ctor != null ? (Command)ctor.Invoke(new object[] { informational }) : (Command)Activator.CreateInstance(type);
+                var ctor1 = type.GetConstructor(Flags, null, new[] { typeof(bool) }, null);
+                var ctor2 = type.GetConstructor(Flags, null, Type.EmptyTypes, null);
+
+                return (Command)(ctor1 != null ? ctor1.Invoke(new object[] { informational }) : ctor2.Invoke(null));
             }
 
             foreach (var asm in asms)

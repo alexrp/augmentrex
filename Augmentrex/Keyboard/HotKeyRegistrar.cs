@@ -12,8 +12,6 @@ namespace Augmentrex.Keyboard
     {
         sealed class MessageWindow : NativeWindow, IDisposable
         {
-            const int HotKeyMessage = 0x312;
-
             readonly HotKeyRegistrar _registrar;
 
             bool _disposed;
@@ -47,6 +45,8 @@ namespace Augmentrex.Keyboard
 
             protected override void WndProc(ref Message m)
             {
+                const int HotKeyMessage = 0x312;
+
                 if (m.Msg == HotKeyMessage)
                 {
                     var key = (Keys)(((int)m.LParam >> 16) & 0xffff);

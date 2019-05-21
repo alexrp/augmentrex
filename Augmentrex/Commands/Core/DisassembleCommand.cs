@@ -28,7 +28,7 @@ namespace Augmentrex.Commands.Core
             "Disassembles instructions from a given memory range based on the main module.";
 
         public override string Syntax =>
-            "[-a] [-s <syntax>] <offset> <length>";
+            "[-a] <offset> <length>";
 
         public override IReadOnlyList<string> Details { get; } =
             new[]

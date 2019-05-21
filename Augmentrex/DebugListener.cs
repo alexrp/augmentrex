@@ -9,8 +9,6 @@ namespace Augmentrex
 {
     sealed class DebugListener : IDisposable
     {
-        const int BufferSize = 4096;
-
         readonly CancellationTokenSource _cts;
 
         readonly Task _task;
@@ -24,6 +22,8 @@ namespace Augmentrex
             _cts = new CancellationTokenSource();
             _task = Task.Factory.StartNew(() =>
             {
+                const int BufferSize = 4096;
+
                 using var mmf = MemoryMappedFile.CreateNew("DBWIN_BUFFER", BufferSize);
                 using var bufReady = new EventWaitHandle(false, EventResetMode.AutoReset, "DBWIN_BUFFER_READY");
                 using var dataReady = new EventWaitHandle(false, EventResetMode.AutoReset, "DBWIN_DATA_READY");

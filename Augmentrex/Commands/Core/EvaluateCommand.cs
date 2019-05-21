@@ -1,8 +1,10 @@
+using Augmentrex.Keyboard;
 using Augmentrex.Memory;
 using CommandLine;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -11,12 +13,11 @@ using System.Threading.Tasks;
 
 namespace Augmentrex.Commands.Core
 {
-    sealed class EvaluateCommand : Command
+    public sealed class EvaluateCommand : Command
     {
         public sealed class Globals
         {
 #pragma warning disable IDE1006 // Naming Styles
-
             public AugmentrexContext ctx { get; }
 
             public Process host { get; }
@@ -27,6 +28,7 @@ namespace Augmentrex.Commands.Core
 
             public Configuration cfg { get; }
 
+            public HotKeyRegistrar keys { get; }
 #pragma warning restore IDE1006 // Naming Styles
 
             internal Globals(AugmentrexContext context)
@@ -36,6 +38,7 @@ namespace Augmentrex.Commands.Core
                 game = context.Game;
                 mem = context.Memory;
                 cfg = context.Configuration;
+                keys = context.HotKeys;
             }
         }
 
@@ -44,12 +47,12 @@ namespace Augmentrex.Commands.Core
             [Option('c')]
             public bool Clear { get; set; }
 
-            [Value(0, Required = true)]
+            [Value(0)]
             public IEnumerable<string> Fragments { get; set; }
         }
 
         public override IReadOnlyList<string> Names { get; } =
-            new[] { "evaluate" };
+            new[] { "evaluate", "print" };
 
         public override string Description =>
             "Evaluates a given C# expression.";
@@ -68,6 +71,10 @@ namespace Augmentrex.Commands.Core
 
         Script _script;
 
+        internal EvaluateCommand()
+        {
+        }
+
         public override int? Run(AugmentrexContext context, string[] args)
         {
             var opts = Parse<EvaluateOptions>(context, args);
@@ -78,16 +85,18 @@ namespace Augmentrex.Commands.Core
             if (_script == null || opts.Clear)
                 _script = CSharpScript.Create(string.Empty,
                     ScriptOptions.Default.WithFilePath("<hgl>")
-                        .WithImports(ScriptOptions.Default.Imports.AddRange(new[]
-                        {
-                            nameof(Augmentrex),
-                            $"{nameof(Augmentrex)}.{nameof(Memory)}",
-                        }))
-                        .WithLanguageVersion(LanguageVersion.Preview)
+                        .WithImports(ScriptOptions.Default.Imports.AddRange(
+                            Assembly.GetExecutingAssembly().DefinedTypes.Select(x => x.Namespace).Where(x => x != null).Distinct()))
+                        .WithLanguageVersion(LanguageVersion.CSharp8)
                         .WithReferences(Assembly.GetExecutingAssembly()),
                     typeof(Globals));
 
-            Script script = _script.ContinueWith(string.Join(" ", opts.Fragments));
+            var code = string.Join(" ", opts.Fragments);
+
+            if (string.IsNullOrWhiteSpace(code))
+                return null;
+
+            Script script = _script.ContinueWith(code);
 
             Task<ScriptState> task;
 
@@ -103,9 +112,22 @@ namespace Augmentrex.Commands.Core
                 return null;
             }
 
+            try
+            {
+                task.Wait();
+            }
+            catch (AggregateException ex)
+            {
+                context.ErrorLine("{0}", ex.InnerException);
+
+                return null;
+            }
+
             _script = script;
 
-            context.InfoLine("{0}", task.Result.ReturnValue);
+            var result = task.Result.ReturnValue;
+
+            context.InfoLine("{0} it = {1}", result?.GetType() ?? typeof(object), result ?? "null");
 
             return null;
         }
