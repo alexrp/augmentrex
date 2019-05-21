@@ -1,3 +1,4 @@
+using Augmentrex.Keyboard;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,7 +16,7 @@ namespace Augmentrex.Plugins
 
         readonly List<Plugin> _plugins = new List<Plugin>();
 
-        AugmentrexContext _shallowContext;
+        AugmentrexContext _context;
 
         public static void LoadPlugins(AugmentrexContext context)
         {
@@ -38,7 +39,7 @@ namespace Augmentrex.Plugins
                 });
                 var mgr = (PluginManager)domain.CreateInstanceAndUnwrap(exe.GetName().FullName, typeof(PluginManager).FullName);
 
-                mgr.StartPlugins(asm, context.Host.Id, context.Game.Id, context.Ipc.ChannelName);
+                mgr.StartPlugins(asm, context.Host.Id, context.Game.Id, context.Ipc.ChannelName, context.HotKeys);
                 _managers.Add((domain, mgr));
             }
         }
@@ -59,20 +60,20 @@ namespace Augmentrex.Plugins
             return null;
         }
 
-        internal void StartPlugins(string path, int hostId, int gameId, string channelName)
+        internal void StartPlugins(string path, int hostId, int gameId, string channelName, HotKeyRegistrar hotKeys)
         {
             var host = Process.GetProcessById(hostId);
             var game = Process.GetProcessById(gameId);
 
-            _shallowContext = new AugmentrexContext(host, game, channelName, true);
+            _context = new AugmentrexContext(true, host, game, channelName, hotKeys);
 
             foreach (var type in Assembly.UnsafeLoadFrom(path).DefinedTypes.Where(x => x.BaseType == typeof(Plugin)))
             {
                 var plugin = (Plugin)Activator.CreateInstance(type);
 
-                _shallowContext.InfoLine("Starting plugin '{0}'...", plugin.Name);
+                _context.InfoLine("Starting plugin '{0}'...", plugin.Name);
 
-                plugin.Start(_shallowContext);
+                plugin.Start(_context);
                 _plugins.Add(plugin);
             }
         }
@@ -81,10 +82,12 @@ namespace Augmentrex.Plugins
         {
             foreach (var plugin in _plugins)
             {
-                _shallowContext.InfoLine("Stopping plugin '{0}'...", plugin.Name);
+                _context.InfoLine("Stopping plugin '{0}'...", plugin.Name);
 
-                plugin.Stop(_shallowContext);
+                plugin.Stop(_context);
             }
+
+            ((IDisposable)_context).Dispose();
         }
     }
 }

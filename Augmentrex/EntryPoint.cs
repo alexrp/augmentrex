@@ -26,7 +26,7 @@ namespace Augmentrex
                 ctx?.ErrorLine("Injected assembly crashed: {0}", e.ExceptionObject);
             };
 
-            ctx = new AugmentrexContext(Process.GetProcessById(context.HostPID), Process.GetCurrentProcess(), channelName, false);
+            ctx = new AugmentrexContext(false, Process.GetProcessById(context.HostPID), Process.GetCurrentProcess(), channelName, null);
 
             try
             {

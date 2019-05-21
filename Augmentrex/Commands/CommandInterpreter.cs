@@ -22,6 +22,8 @@ namespace Augmentrex.Commands
 
         public static IReadOnlyCollection<Command> Commands => _commands;
 
+        readonly object _lock = new object();
+
         public AugmentrexContext Context { get; }
 
         public CommandInterpreter(AugmentrexContext context)
@@ -64,35 +66,38 @@ namespace Augmentrex.Commands
             var name = args[0];
             var cmd = GetCommand(name);
 
-            if (cmd == null)
+            lock (_lock)
             {
-                Context.ErrorLine("Unknown command '{0}'.", name);
+                if (cmd == null)
+                {
+                    Context.ErrorLine("Unknown command '{0}'.", name);
+
+                    return true;
+                }
+
+                int? code = null;
+
+                try
+                {
+                    code = cmd.Run(Context, args.Skip(1).ToArray());
+                }
+                catch (Exception ex)
+                {
+                    Context.ErrorLine("Command '{0}' failed: {1}", name, ex.ToString());
+                }
+
+                if (code is int c)
+                {
+                    var chan = Context.Ipc.Channel;
+
+                    chan.ExitCode = c;
+                    chan.KeepAlive();
+
+                    return false;
+                }
 
                 return true;
             }
-
-            int? code = null;
-
-            try
-            {
-                code = cmd.Run(Context, args.Skip(1).ToArray());
-            }
-            catch (Exception ex)
-            {
-                Context.ErrorLine("Command '{0}' failed: {1}", name, ex.ToString());
-            }
-
-            if (code is int c)
-            {
-                var chan = Context.Ipc.Channel;
-
-                chan.ExitCode = c;
-                chan.KeepAlive();
-
-                return false;
-            }
-
-            return true;
         }
 
         public void RunLoop()

@@ -1,4 +1,5 @@
 using Augmentrex.Ipc;
+using Augmentrex.Keyboard;
 using Augmentrex.Memory;
 using System;
 using System.Collections.Generic;
@@ -20,15 +21,19 @@ namespace Augmentrex
 
         public Configuration Configuration => Ipc.Configuration;
 
+        public HotKeyRegistrar HotKeys { get; }
+
         readonly ConsoleWindow _console;
 
         readonly DebugListener _debug;
 
         readonly HashSet<IDisposable> _hooks = new HashSet<IDisposable>();
 
+        readonly bool _shallow;
+
         bool _disposed;
 
-        internal AugmentrexContext(Process host, Process game, string channelName, bool shallow)
+        internal AugmentrexContext(bool shallow, Process host, Process game, string channelName, HotKeyRegistrar hotKeys)
         {
             Host = host;
             Game = game;
@@ -37,12 +42,15 @@ namespace Augmentrex
 
             Memory = new MemoryWindow(mod.BaseAddress, (uint)mod.ModuleMemorySize);
             Ipc = new IpcBridge(channelName, shallow);
+            HotKeys = hotKeys ?? new HotKeyRegistrar();
 
-            if (shallow)
-                return;
+            if (!shallow)
+            {
+                _console = new ConsoleWindow(this);
+                _debug = new DebugListener(this);
+            }
 
-            _console = new ConsoleWindow(this);
-            _debug = new DebugListener(this);
+            _shallow = shallow;
         }
 
         ~AugmentrexContext()
@@ -69,6 +77,10 @@ namespace Augmentrex
 
             _debug?.Dispose();
             _console?.Dispose();
+
+            if (!_shallow)
+                ((IDisposable)HotKeys)?.Dispose();
+
             Ipc?.Dispose();
             Game?.Dispose();
             Host?.Dispose();

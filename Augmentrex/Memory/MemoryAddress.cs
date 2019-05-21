@@ -105,7 +105,7 @@ namespace Augmentrex.Memory
 
         public static bool operator !=(MemoryAddress left, MemoryAddress right)
         {
-            return left._address != right._address;
+            return !(left == right);
         }
 
         public static bool operator >(MemoryAddress left, MemoryAddress right)

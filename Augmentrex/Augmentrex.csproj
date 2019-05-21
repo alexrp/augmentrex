@@ -45,6 +45,9 @@
     <Compile Include="Commands\Core\HelpCommand.cs" />
     <Compile Include="Commands\Core\WriteCommand.cs" />
     <Compile Include="EntryPoint.cs" />
+    <Compile Include="Keyboard\HotKeyHandler.cs" />
+    <Compile Include="Keyboard\HotKeyRegistrar.cs" />
+    <Compile Include="Keyboard\HotKeyInfo.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Memory\FunctionHook.cs" />
     <Compile Include="Memory\InstructionExtensions.cs" />
@@ -93,9 +96,12 @@
       <Version>1.1.11</Version>
     </PackageReference>
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe">
-      <Version>4.6.0-preview6.19259.10</Version>
+      <Version>4.5.2</Version>
     </PackageReference>
     <PackageReference Include="Vanara.PInvoke.Kernel32">
+      <Version>2.3.8</Version>
+    </PackageReference>
+    <PackageReference Include="Vanara.PInvoke.User32">
       <Version>2.3.8</Version>
     </PackageReference>
   </ItemGroup>
