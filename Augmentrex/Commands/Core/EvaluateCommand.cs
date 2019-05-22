@@ -58,7 +58,7 @@ namespace Augmentrex.Commands.Core
             "Evaluates a given C# expression.";
 
         public override string Syntax =>
-            "[-c] <expr>";
+            "[-c] [expr]";
 
         public override IReadOnlyList<string> Details { get; } =
             new[]

@@ -1,3 +1,4 @@
+using Augmentrex.Commands;
 using Augmentrex.Ipc;
 using Augmentrex.Keyboard;
 using Augmentrex.Memory;
@@ -23,6 +24,8 @@ namespace Augmentrex
 
         public HotKeyRegistrar HotKeys { get; }
 
+        internal CommandInterpreter Interpreter { get; }
+
         readonly ConsoleWindow _console;
 
         readonly DebugListener _debug;
@@ -46,8 +49,9 @@ namespace Augmentrex
 
             if (!shallow)
             {
-                _console = new ConsoleWindow(this);
-                _debug = new DebugListener(this);
+                Interpreter = new CommandInterpreter(this);
+                _console = Configuration.GameConsoleEnabled ? new ConsoleWindow(this) : null;
+                _debug = Configuration.DebugListenerEnabled ? new DebugListener(this) : null;
             }
 
             _shallow = shallow;

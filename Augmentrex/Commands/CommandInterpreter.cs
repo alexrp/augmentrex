@@ -60,7 +60,7 @@ namespace Augmentrex.Commands
             return Commands.Where(x => x.Names.Any(y => MatchCommand(y, name))).FirstOrDefault();
         }
 
-        public bool RunCommand(string command)
+        public bool RunCommand(string command, bool async)
         {
             if (string.IsNullOrWhiteSpace(command))
                 return true;
@@ -71,6 +71,17 @@ namespace Augmentrex.Commands
 
             lock (_lock)
             {
+                var chan = Context.Ipc.Channel;
+
+                if (async)
+                {
+                    Context.Line();
+                    chan.PrintPrompt();
+                    chan.ColorLine(Console.ForegroundColor, "{0}", command);
+                }
+
+                using var _ = async ? new Finally(() => chan.PrintPrompt()) : default;
+
                 if (cmd == null)
                 {
                     Context.ErrorLine("Unknown command '{0}'.", name);
@@ -86,13 +97,11 @@ namespace Augmentrex.Commands
                 }
                 catch (Exception ex)
                 {
-                    Context.ErrorLine("Command '{0}' failed: {1}", name, ex.ToString());
+                    Context.ErrorLine("Command '{0}' failed: {1}", name, ex);
                 }
 
                 if (code is int c)
                 {
-                    var chan = Context.Ipc.Channel;
-
                     chan.ExitCode = c;
                     chan.KeepAlive();
 
@@ -107,9 +116,10 @@ namespace Augmentrex.Commands
         {
             while (true)
             {
-                var str = Context.Ipc.Channel.ReadPrompt();
+                var chan = Context.Ipc.Channel;
+                var str = chan.ReadPrompt();
 
-                if (!RunCommand(str))
+                if (str == null || chan.ExitCode != null || !RunCommand(str, false))
                     break;
             }
         }

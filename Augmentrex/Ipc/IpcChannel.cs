@@ -129,11 +129,27 @@ namespace Augmentrex.Ipc
             Log.Line();
         }
 
+        public void PrintPrompt()
+        {
+            _counter++;
+
+            Log.Color(ConsoleColor.Cyan, "hgl({0})> ", _counter);
+        }
+
         public string ReadPrompt()
         {
-            Log.Color(ConsoleColor.Cyan, "hgl({0})> ", ++_counter);
+            PrintPrompt();
 
-            var str = ReadLine.Read();
+            string str;
+
+            try
+            {
+                str = ReadLine.Read();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
 
             if (!string.IsNullOrWhiteSpace(str))
                 ReadLine.AddHistory(str);

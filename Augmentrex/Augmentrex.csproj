@@ -31,6 +31,7 @@
     <Compile Include="Commands\Core\ClearCommand.cs" />
     <Compile Include="Commands\Core\DisassembleCommand.cs" />
     <Compile Include="Commands\Core\EvaluateCommand.cs" />
+    <Compile Include="Commands\Core\KeyCommand.cs" />
     <Compile Include="Commands\Core\KillCommand.cs" />
     <Compile Include="Commands\Core\ReloadCommand.cs" />
     <Compile Include="Configuration.cs" />
@@ -58,6 +59,7 @@
     <Compile Include="Plugins\PluginManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Finally.cs" />
     <Compile Include="Win32.cs" />
   </ItemGroup>
   <ItemGroup>

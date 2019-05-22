@@ -48,15 +48,15 @@ namespace Augmentrex
                 PluginManager.LoadPlugins(ctx);
                 CommandInterpreter.LoadCommands(false);
 
-                var interp = new CommandInterpreter(ctx);
                 var rc = ctx.Configuration.RunCommands;
+                var interp = ctx.Interpreter;
 
                 if (rc.Length != 0)
                 {
                     ctx.InfoLine("Running startup commands...");
 
                     foreach (var cmd in rc)
-                        interp.RunCommand(cmd);
+                        interp.RunCommand(cmd, false);
                 }
 
                 ctx.SuccessLine("Injection completed successfully. Type 'help' for a list of commands.");
