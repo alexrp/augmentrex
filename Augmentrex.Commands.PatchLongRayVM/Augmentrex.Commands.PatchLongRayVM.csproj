@@ -11,7 +11,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <Deterministic>true</Deterministic>
     <LangVersion>8.0</LangVersion>
-    <OutputPath>..\bin\</OutputPath>
+    <OutputPath>..\Build\</OutputPath>
     <OutputType>Library</OutputType>
     <ProjectGuid>{3649819A-6DB2-4D13-92D1-9AF8DCF1F6E6}</ProjectGuid>
     <RootNamespace>Augmentrex.Commands.PatchLongRayVM</RootNamespace>

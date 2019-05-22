@@ -11,7 +11,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <Deterministic>true</Deterministic>
     <LangVersion>8.0</LangVersion>
-    <OutputPath>..\bin\</OutputPath>
+    <OutputPath>..\Build\</OutputPath>
     <OutputType>Library</OutputType>
     <ProjectGuid>{0AC3B157-4389-4FDB-8778-F87E48C1C663}</ProjectGuid>
     <RootNamespace>Augmentrex.Commands.PatchCCAgent</RootNamespace>

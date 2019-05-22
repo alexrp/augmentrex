@@ -13,7 +13,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <Deterministic>true</Deterministic>
     <LangVersion>8.0</LangVersion>
-    <OutputPath>..\bin\</OutputPath>
+    <OutputPath>..\Build\</OutputPath>
     <OutputType>Exe</OutputType>
     <Prefer32Bit>true</Prefer32Bit>
     <ProjectGuid>{6E5B1E1C-5C31-444F-906D-C1C04DB0CB5F}</ProjectGuid>
