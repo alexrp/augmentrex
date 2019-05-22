@@ -1,4 +1,4 @@
-# ![Augmentrex](Augmentrex/Properties/Hellgate.ico) Augmentrex
+# ![Augmentrex](Augmentrex.ico) Augmentrex
 
 [![Latest Release](https://img.shields.io/github/release/alexrp/augmentrex/all.svg)](https://github.com/alexrp/augmentrex/releases)
 [![Build Status](https://ci.appveyor.com/api/projects/status/github/alexrp/augmentrex?svg=true)](https://ci.appveyor.com/project/alexrp/augmentrex)
