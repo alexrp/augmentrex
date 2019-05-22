@@ -150,7 +150,7 @@ project will help you do that.
 
 ## Contributing
 
-Please see [.github/CONTRIBUTING.md](CONTRIBUTING.md).
+Please see [CONTRIBUTING.md](.github/CONTRIBUTING.md).
 
 ## License
 
