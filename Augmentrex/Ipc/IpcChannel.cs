@@ -161,5 +161,10 @@ namespace Augmentrex.Ipc
         {
             Console.Clear();
         }
+
+        public void Beep(int frequency, TimeSpan duration)
+        {
+            Console.Beep(frequency, (int)duration.TotalMilliseconds);
+        }
     }
 }

@@ -74,6 +74,11 @@ namespace Augmentrex.Commands.Core
             {
                 void KeyHandler(HotKeyInfo info)
                 {
+                    var freq = context.Configuration.HotKeyBeepFrequency;
+
+                    if (freq != 0)
+                        context.Ipc.Channel.Beep(freq, context.Configuration.HotKeyBeepDuration);
+
                     if (_bindings.TryGetValue(info, out var command))
                         context.Interpreter.RunCommand(command, true);
                 }

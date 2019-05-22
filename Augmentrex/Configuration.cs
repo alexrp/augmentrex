@@ -27,6 +27,10 @@ namespace Augmentrex
 
         public TimeSpan DebugListenerInterval { get; set; }
 
+        public int HotKeyBeepFrequency { get; set; }
+
+        public TimeSpan HotKeyBeepDuration { get; set; }
+
         public string[] DisabledPlugins { get; set; }
 
         public string[] RunCommands { get; set; }
@@ -38,10 +42,12 @@ namespace Augmentrex
             IpcTimeout = TimeSpan.FromMilliseconds(int.Parse(cfg["ipcTimeout"]));
             IpcKeepAlive = TimeSpan.FromMilliseconds(int.Parse(cfg["ipcKeepAlive"]));
             DebugListenerInterval = TimeSpan.FromMilliseconds(int.Parse(cfg["debugListenerInterval"]));
-            RunCommands = Split(cfg["runCommands"], ';');
-            DisabledPlugins = Split(cfg["disabledPlugins"], ',');
             GameConsoleEnabled = bool.Parse(cfg["gameConsoleEnabled"]);
             DebugListenerEnabled = bool.Parse(cfg["debugListenerEnabled"]);
+            HotKeyBeepFrequency = int.Parse(cfg["hotKeyBeepFrequency"]);
+            HotKeyBeepDuration = TimeSpan.FromMilliseconds(int.Parse(cfg["HotKeyBeepDuration"]));
+            DisabledPlugins = Split(cfg["disabledPlugins"], ',');
+            RunCommands = Split(cfg["runCommands"], ';');
         }
 
         static string[] Split(string value, params char[] separators)

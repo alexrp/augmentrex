@@ -63,6 +63,8 @@ configuration values. Here are some values you might be interested in changing:
   leave `-nokeyhooks` here.
 * `gameConsoleEnabled` and `debugListenerEnabled`: You can set these to `False`
   if you are not interested in debug output from the game process.
+* `hotKeyBeepFrequency`: Set to `0` if you do not want a beep sound when
+  pressing a hot key.
 * `disabledPlugins`: This can be used to disable individual plugins without
   removing the files from the Augmentrex directory.
 * `runCommands`: You can use this to run commands at startup. For example, you
