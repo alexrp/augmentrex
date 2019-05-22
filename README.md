@@ -79,6 +79,21 @@ Steam and launch it for you, then attach to the game process.
 Once the game is open, you can type `patch-long-ray-vm` and/or `patch-cc-agent`
 to toggle those patches (even during gameplay).
 
+If you get an EasyHook error along the lines of `STATUS_INTERNAL_ERROR` with
+code 5, you will need to do the following:
+
+* Close Augmentrex and the game.
+* Navigate to your `Hellgate_sp_x86.exe` file.
+* Right click -> Properties -> Compatibility.
+* Tick the "Run in 640 x 480 screen resolution" option.
+* Click OK.
+
+It is [unclear](https://github.com/EasyHook/EasyHook/issues/295) why this is
+necessary on some systems, but the good news is that the game will run with the
+correct video settings even with this option enabled (i.e. not actually
+640x480). If you want to run the game without Augmentrex, though, you will have
+to go back and untick that option.
+
 ## Known Issues
 
 The `patch-long-ray-vm` command has a few side effects to be aware of:
