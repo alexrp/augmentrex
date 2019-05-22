@@ -19,6 +19,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{047B8436-9292-466C-B8C3-A5B133A58A51}"
 	ProjectSection(SolutionItems) = preProject
 		.github\CODEOWNERS = .github\CODEOWNERS
+		.github\CONTRIBUTING.md = .github\CONTRIBUTING.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Augmentrex.Commands.PatchCCAgent", "Augmentrex.Commands.PatchCCAgent\Augmentrex.Commands.PatchCCAgent.csproj", "{0AC3B157-4389-4FDB-8778-F87E48C1C663}"

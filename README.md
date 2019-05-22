@@ -37,13 +37,20 @@ Plugins included with the core:
 (Developers can use these as examples for implementing custom commands and
 plugins.)
 
-## Usage
+## Installation
 
-Simply launch `Augmentrex.exe`. Augmentrex will locate the game executable via
-Steam and launch it for you, then attach to the game process.
+[Archives with compiled binaries are available from the releases page.](https://github.com/alexrp/augmentrex/releases)
 
-Once the game is open, you can type `patch-long-ray-vm` and/or `patch-cc-agent`
-to toggle those patches (even during gameplay).
+Augmentrex requires .NET Framework 4.7.2 to run.
+
+If you want to build Augmentrex from source, you will need Visual Studio 2019
+(any edition). The code base is written in C# 8.0, so earlier versions will not
+work.
+
+Simply open `Alkahest.sln` and build it with the `Debug` + `x86` configuration.
+All build artifacts will end up in the `Build` directory.
+
+## Configuration
 
 Advanced users can have a look in `Augmentrex.exe.config` if they wish to change
 configuration values. Here are some values you might be interested in changing:
@@ -63,6 +70,14 @@ configuration values. Here are some values you might be interested in changing:
   `patch-cc-agent; patch-long-ray-vm; key --add -s F1 patch-long-ray-vm` to
   enable `patch-cc-agent` and `patch-long-ray-vm` at startup and set a Shift+F1
   key binding to toggle `patch-long-ray-vm`.
+
+## Usage
+
+Simply launch `Augmentrex.exe`. Augmentrex will locate the game executable via
+Steam and launch it for you, then attach to the game process.
+
+Once the game is open, you can type `patch-long-ray-vm` and/or `patch-cc-agent`
+to toggle those patches (even during gameplay).
 
 ## Known Issues
 
@@ -117,6 +132,14 @@ product.
 
 Still, for those who bought the game and would still like to play it, this
 project will help you do that.
+
+## Contributing
+
+Please see [.github/CONTRIBUTING.md](CONTRIBUTING.md).
+
+## License
+
+Please see [LICENSE.md](LICENSE.md).
 
 ## Donations
 
