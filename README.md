@@ -1,5 +1,8 @@
 # ![Augmentrex](Augmentrex/Properties/Hellgate.ico) Augmentrex
 
+[![Latest Release](https://img.shields.io/github/release/alexrp/augmentrex/all.svg)](https://github.com/alexrp/augmentrex/releases)
+[![Build Status](https://ci.appveyor.com/api/projects/status/github/alexrp/augmentrex?svg=true)](https://ci.appveyor.com/project/alexrp/augmentrex)
+
 **Augmentrex** is a reverse engineering tool for the
 [Steam version of Hellgate: London](https://store.steampowered.com/app/939520/HELLGATE_London).
 It provides a generic framework for doing in-memory interaction with the
@@ -114,3 +117,15 @@ product.
 
 Still, for those who bought the game and would still like to play it, this
 project will help you do that.
+
+## Donations
+
+[![Liberapay Receiving](http://img.shields.io/liberapay/receives/alexrp.svg?logo=liberapay)](https://liberapay.com/alexrp/donate)
+[![Liberapay Patrons](http://img.shields.io/liberapay/patrons/alexrp.svg?logo=liberapay)](https://liberapay.com/alexrp)
+
+I work on open source software projects such as this one in my spare time, and
+make them available free of charge under permissive licenses. If you like my
+work and would like to support me, you might consider donating. Please only
+donate if you want to and have the means to do so; I want to be very clear that
+all open source software I write will always be available for free and you
+should not feel obligated to donate or pay for it in any way.
