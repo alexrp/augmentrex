@@ -1,6 +1,7 @@
 /*/bin
 /*/obj
 /Build
+/packages
 .vs
 .vscode
 *.user

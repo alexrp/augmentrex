@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <ApplicationIcon>Properties\Hellgate.ico</ApplicationIcon>
+    <ApplicationIcon>..\Augmentrex.ico</ApplicationIcon>
     <ApplicationManifest>Properties\App.manifest</ApplicationManifest>
     <AssemblyName>Augmentrex</AssemblyName>
     <DebugSymbols>true</DebugSymbols>
@@ -26,6 +26,9 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\SolutionInfo.cs">
+      <Link>Properties\SolutionInfo.cs</Link>
+    </Compile>
     <Compile Include="Commands\CommandInterpreter.cs" />
     <Compile Include="Commands\Core\BreakCommand.cs" />
     <Compile Include="Commands\Core\ClearCommand.cs" />
@@ -63,9 +66,11 @@
     <Compile Include="Win32.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Augmentrex.ico">
+      <Link>..\Augmentrex.ico</Link>
+    </None>
     <None Include="Properties\App.config" />
     <None Include="Properties\App.manifest" />
-    <None Include="Properties\Hellgate.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(NuGetPackageRoot)\easyhook\2.7.6789\content\net40\*32*">

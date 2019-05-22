@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28721.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Augmentrex", "Augmentrex\Augmentrex.csproj", "{6E5B1E1C-5C31-444F-906D-C1C04DB0CB5F}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C02001A0-750D-4A8B-89A2-8765A3FCE7A6}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -12,8 +10,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 		.markdownlint.json = .markdownlint.json
 		appveyor.yml = appveyor.yml
+		Augmentrex.ico = Augmentrex.ico
 		LICENSE.md = LICENSE.md
 		README.md = README.md
+		SolutionInfo.cs = SolutionInfo.cs
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{047B8436-9292-466C-B8C3-A5B133A58A51}"
@@ -21,6 +21,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{047B
 		.github\CODEOWNERS = .github\CODEOWNERS
 		.github\CONTRIBUTING.md = .github\CONTRIBUTING.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Augmentrex", "Augmentrex\Augmentrex.csproj", "{6E5B1E1C-5C31-444F-906D-C1C04DB0CB5F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Augmentrex.Archive", "Augmentrex.Archive\Augmentrex.Archive.proj", "{9522FC5A-8E6E-40C2-853E-6947B656D0D6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Augmentrex.Commands.PatchCCAgent", "Augmentrex.Commands.PatchCCAgent\Augmentrex.Commands.PatchCCAgent.csproj", "{0AC3B157-4389-4FDB-8778-F87E48C1C663}"
 EndProject
@@ -35,6 +39,7 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{6E5B1E1C-5C31-444F-906D-C1C04DB0CB5F}.Debug|x86.ActiveCfg = Debug|x86
 		{6E5B1E1C-5C31-444F-906D-C1C04DB0CB5F}.Debug|x86.Build.0 = Debug|x86
+		{9522FC5A-8E6E-40C2-853E-6947B656D0D6}.Debug|x86.ActiveCfg = Debug|x86
 		{0AC3B157-4389-4FDB-8778-F87E48C1C663}.Debug|x86.ActiveCfg = Debug|x86
 		{0AC3B157-4389-4FDB-8778-F87E48C1C663}.Debug|x86.Build.0 = Debug|x86
 		{3649819A-6DB2-4D13-92D1-9AF8DCF1F6E6}.Debug|x86.ActiveCfg = Debug|x86

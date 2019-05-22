@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <ProjectGuid>{9522FC5A-8E6E-40C2-853E-6947B656D0D6}</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets" Condition="Exists('..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets')" />
+  <Import Project="..\packages\MSBuild.Extension.Pack.1.9.1\build\net40\MSBuild.Extension.Pack.targets" Condition="Exists('..\packages\MSBuild.Extension.Pack.1.9.1\build\net40\MSBuild.Extension.Pack.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets'))" />
+    <Error Condition="!Exists('..\packages\MSBuild.Extension.Pack.1.9.1\build\net40\MSBuild.Extension.Pack.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSBuild.Extension.Pack.1.9.1\build\net40\MSBuild.Extension.Pack.targets'))" />
+  </Target>
+  <Target Name="Build">
+    <ItemGroup>
+      <ReleaseFiles Include="..\*.md; ..\*.ico" />
+      <ReleaseFiles Include="..\Build\*.exe*; ..\Build\*.dll; ..\Build\*.pdb" />
+    </ItemGroup>
+    <Assembly TaskAction="GetInfo" NetAssembly="..\Build\Augmentrex.exe">
+      <Output TaskParameter="OutputItems" ItemName="AugmentrexInfo" />
+    </Assembly>
+    <Zip ZipFileName="..\Build\Augmentrex-%(AugmentrexInfo.AssemblyInformationalVersion).zip" WorkingDirectory="..\Build" Files="@(ReleaseFiles)" />
+  </Target>
+  <Target Name="Clean">
+    <Delete Files="..\Build\Augmentrex-*.zip" />
+  </Target>
+  <Target Name="Rebuild" DependsOnTargets="Clean; Build" />
+</Project>
