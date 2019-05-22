@@ -14,47 +14,67 @@ new affixes to items.)
 Core features include:
 
 * [EasyHook](https://easyhook.github.io)-based injection into the game process.
-* Plugins can be written in any managed language (C#, F#, etc).
-* Core APIs and commands for reading, writing, and disassembling memory.
+* Custom commands and reloadable plugins can be written in any managed language.
+* Core APIs and commands for manipulating game memory and global hot keys.
+* Built-in `OutputDebugString()` listener for game output.
 * Automatic detection and launching of the game.
 
-Core plugins include:
+Custom commands included with the core:
 
 * `patch-long-ray-vm`: Disables the game's ray casting engine, fixing the vast
   majority of frame rate issues (commonly known as the 1 FPS bug).
+* `patch-cc-agent`: Disables the game's capsule-capsule collision agent, fixing
+  frame rate issues for certain skills (e.g. Blademaster's Whirlwind).
 
-(Developers can use those plugins as examples for implementing a plugin.)
+Plugins included with the core:
+
+* `simple-test`: Just a simple a plugin that outputs a message on startup and
+  shutdown.
+
+(Developers can use these as examples for implementing custom commands and
+plugins.)
 
 ## Usage
 
-Simply launch `Augmentrex.exe`. If the game is open, Augmentrex will attach to
-that process; otherwise, it will locate the game directory via Steam and launch
-it from there.
+Simply launch `Augmentrex.exe`. Augmentrex will locate the game executable via
+Steam and launch it for you, then attach to the game process.
 
-Once the game is open, you can type `patch-long-ray-vm` in the Augmentrex
-console window to toggle the 1 FPS fix.
+Once the game is open, you can type `patch-long-ray-vm` and/or `patch-cc-agent`
+to toggle those patches (even during gameplay).
 
 Advanced users can have a look in `Augmentrex.exe.config` if they wish to change
-configuration values.
+configuration values. Here are some values you might be interested in changing:
+
+* `gamePath`: If Augmentrex cannot locate the game executable via Steam, you can
+  set this value explicitly. For example, on my system, I would set this to
+  `C:\Program Files (x86)\Steam\steamapps\common\HELLGATE_London\bin\Hellgate_sp_x86.exe`.
+* `gameArguments`: Any command line arguments to pass to the game. I personally
+  dislike the keyboard hook the game does to disable the Win key, so I would
+  leave `-nokeyhooks` here.
+* `gameConsoleEnabled` and `debugListenerEnabled`: You can set these to `False`
+  if you are not interested in debug output from the game process.
+* `disabledPlugins`: This can be used to disable individual plugins without
+  removing the files from the Augmentrex directory.
+* `runCommands`: You can use this to run commands at startup. For example, you
+  could set it to
+  `patch-cc-agent; patch-long-ray-vm; key --add -s F1 patch-long-ray-vm` to
+  enable `patch-cc-agent` and `patch-long-ray-vm` at startup and set a Shift+F1
+  key binding to toggle `patch-long-ray-vm`.
 
 ## Known Issues
 
-The `patch-long-ray-vm` plugin has a few side effects to be aware of:
+The `patch-long-ray-vm` command has a few side effects to be aware of:
 
 * You can see portal names and enemy nameplates through terrain.
 * Collision detection for ranged attacks will be non-functional, allowing both
-  you and certain enemy types to attack through terrain.
+  you and certain enemy types to attack through some types of terrain.
 * Enemy corpses will often just vanish when they die, or less frequently, end up
   in weird poses.
 * Certain bosses (Ash and Oculis, possibly others) rely on ray casting for some
-  of their attacks. You have to toggle the plugin off before you engage these
+  of their attacks. You have to toggle the command off before you engage these
   bosses, or you will not be able to kill them.
 
-Also, just a note to clear up any potential confusion: There are other frame
-rate issues in the game. This plugin does not currently address those. One other
-instance that I am aware of is when you kill a pack of Fellbore enemies
-instantly when they spawn in. This is a completely separate issue that I am
-still investigating.
+As far as I am aware, the `patch-cc-agent` command has no negative side effects.
 
 ## Background
 
